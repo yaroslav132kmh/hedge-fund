@@ -1,0 +1,63 @@
+# Market analysis, Heston calibration, greeks and hedging strategy parameters.
+market_analysis:
+  vol_window: 30
+  vol_of_vol_window: 30
+  confidence_level: 0.95
+  regime_n_states: 3
+  regime_window: 30
+  top_n_hedge_instruments: 10
+  correlation:
+    methods: [pearson, spearman, kendall, dcc_garch, cointegration]
+    rolling_window: 30
+    positive_threshold: 0.5
+    negative_threshold: -0.3
+    zero_band: 0.1
+    dcc_a: 0.02
+    dcc_b: 0.95
+    dcc_max_iter: 50
+    cointegration_method: both     # engle_granger | johansen | both
+    cointegration_pvalue: 0.05
+    johansen_det_order: 0
+    johansen_k_ar_diff: 1
+  ranking_weights:
+    correlation: 0.30
+    stability: 0.25
+    liquidity: 0.15
+    hedge_cost: 0.15
+    risk_reduction: 0.15
+
+heston:
+  calibration_method: iv_surface   # iv_surface | mle
+  num_iter: 50
+  tol: 1.0e-8
+  initial_params: [0.04, 2.0, 0.04, 0.5, -0.5]   # v0, kappa, theta, eps, rho
+  mle_n_steps: 90
+  stability_window: 10
+  stability_max_rel_change: 0.5
+  benchmarks: [black_scholes, sabr]
+  sabr_beta: 0.5
+  flat_yield_fallback: 0.0
+
+greeks:
+  engine: analytical               # analytical | mc
+  spot_bump_pct: 0.01
+  vol_bump: 0.01
+  time_bump_days: 1.0
+  rate_bump: 0.0001
+  mc_n_paths: 50000
+  mc_max_dt: 0.0137
+  mc_min_steps: 40
+  mc_minimum_var: 0.01
+  greeks_to_compute: [delta, gamma, vega, theta, rho, vanna, volga, charm]
+
+hedging:
+  delta_eps: 0.0
+  vega_eps: 0.0
+  delta_green_zone: 0.05
+  delta_red_zone: 0.15
+  target_delta: 0.0
+  target_vega: 0.0
+  hedge_instrument_strike_moneyness: 1.0
+  liability_put_moneyness: 0.95
+  vega_call_moneyness: 1.0
+  calibration_subsample: 1

@@ -1,0 +1,32 @@
+# Core system configuration. Every random process is seeded from `seed`.
+seed: 90909090
+run_id: default
+
+investment:
+  capital_usd: 10000000.0      # $10M investment
+  risk_budget_pct: 0.02        # max fraction of capital at 1-day risk (VaR); BTC daily VaR ~5%
+
+  transaction_fee_pct: 0.0003  # spot taker fee
+  option_fee_pct: 0.0003       # option fee on underlying notional (Deribit-style)
+  option_fee_cap_pct: 0.125    # option fee capped at 12.5% of option price
+
+horizons:
+  analysis_days: 90            # ~3 months historical look-back
+  forecast_days: 1             # 1-day forecasting horizon
+  trading_days_per_year: 365   # crypto trades 24/7
+
+paths:
+  data_dir: data
+  raw_dir: data/raw
+  processed_dir: data/processed
+  artifacts_dir: artifacts
+  checkpoint_dir: artifacts/checkpoints
+  calibration_dir: artifacts/calibration
+  results_dir: artifacts/results
+  log_dir: artifacts/logs
+
+runtime:
+  parallel: true
+  n_jobs: -1
+  checkpointing: true
+  resume: true

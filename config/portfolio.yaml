@@ -1,0 +1,51 @@
+# Portfolio optimisation, risk management and backtesting.
+optimization:
+  method: max_diversification       # fallback method if auto-select is off
+  methods: [mean_variance, risk_parity, min_variance, max_diversification, cvar]
+  rebalance_frequency_days: 5
+  max_turnover: 0.5
+  transaction_cost_aversion: 1.0
+  risk_aversion: 5.0
+  cvar_alpha: 0.95
+  long_only: true
+  max_weight: 0.2                   # cap per-asset weight to enforce diversification
+  portfolio_universe_size: 15       # instruments held in the investable portfolio
+  lookback_days: 30                 # trailing window for re-estimating weights
+  min_expected_return: 0.0          # prefer a profitable portfolio when selecting
+  diversification_weight: 0.5       # weight of diversification vs Sharpe in selection
+  auto_select_method: true          # choose the best method by the selection score
+
+risk:
+  var_method: historical            # historical | gaussian | cornish_fisher
+  var_confidence: 0.95
+  cvar_confidence: 0.95
+  var_limit_pct: 0.05
+  max_drawdown_limit_pct: 0.25
+  leverage_limit: 3.0
+  stop_loss:
+    enabled: true
+    atr_window: 14
+    atr_multiplier: 3.0
+    var_multiplier: 1.5
+    trailing: true
+    trailing_atr_multiplier: 2.5
+    min_stop_pct: 0.02
+    max_stop_pct: 0.25
+    recalibrate_window: 30
+
+backtest:
+  mode: walk_forward
+  train_window: 30
+  test_window: 5
+  step: 5
+  purge: 0
+  embargo: 0
+  account_survivorship_bias: true
+  account_selection_bias: true
+  account_transaction_cost_bias: true
+  stress_scenarios:
+    - {name: "crash_-10pct", spot_shock: -0.10, vol_shock: 0.50}
+    - {name: "crash_-5pct",  spot_shock: -0.05, vol_shock: 0.25}
+    - {name: "rally_+5pct",  spot_shock: 0.05,  vol_shock: -0.10}
+    - {name: "rally_+10pct", spot_shock: 0.10,  vol_shock: -0.20}
+    - {name: "vol_spike",    spot_shock: 0.0,   vol_shock: 1.00}

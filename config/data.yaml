@@ -1,0 +1,19 @@
+# Data acquisition. Provider is pluggable:
+#   bundled   - reads the reproducible, version-controlled dataset (default, offline)
+#   synthetic - regenerates the dataset deterministically from `seed`
+#   binance   - live spot via Binance public REST (no key); options stay Heston-consistent
+data:
+  provider: bundled
+  primary_symbol: BTCUSDT
+  quote_currency: USDT
+  universe_size: 100
+  symbols: []                  # empty -> curated default universe, padded to universe_size
+  bar_interval: 1d
+  option_expiry_days: 30       # 30-day expiry option chain for the primary asset
+  options_universe:
+    - BTCUSDT
+  n_strikes_per_expiry: 11
+  strike_width_pct: 0.6
+  binance_base_url: https://api.binance.com
+  request_timeout_s: 15.0
+  cache_raw: true
